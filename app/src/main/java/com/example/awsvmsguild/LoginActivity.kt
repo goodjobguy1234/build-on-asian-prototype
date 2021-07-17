@@ -1,0 +1,75 @@
+package com.example.awsvmsguild
+
+import android.app.Activity
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import com.amazonaws.mobile.auth.core.signin.AuthException
+import com.amplifyframework.kotlin.core.Amplify
+import com.example.awsvmsguild.extension.loadingDialog
+import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+class LoginActivity : AppCompatActivity() {
+    lateinit var loadingDialog: AlertDialog
+    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            data?.getBooleanExtra("isSuccess", false)?.let {
+                if (it) Toast.makeText(this, "Email Verified", Toast.LENGTH_SHORT).show()
+                else Toast.makeText(this, "Please Verify your email", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login)
+        loadingDialog = loadingDialog(R.layout.view_loading_dialog, "Logging in", "Loading")
+
+    }
+
+    fun onLoginCliked(view: View) {
+        val username = user_input.text.toString()
+        val password = password_input.text.toString()
+        loadingDialog.show()
+        GlobalScope.launch(Dispatchers.IO) {
+            auth(username, password)
+        }
+    }
+
+    private suspend fun auth(username: String, password: String) {
+        try {
+            val result = Amplify.Auth.signIn(username, password)
+            if (result.isSignInComplete) {
+                GlobalScope.launch(Dispatchers.Main) {
+                    Toast.makeText(this@LoginActivity, "Login success", Toast.LENGTH_SHORT).show()
+                    loadingDialog.hide()
+                    val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                    startActivity(intent)
+                }
+            } else {
+                GlobalScope.launch(Dispatchers.Main) {
+                    Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT).show()
+                    loadingDialog.hide()
+                }
+            }
+        } catch (error: AuthException) {
+            Log.e("AuthQuickstart", "Sign in failed", error)
+        }
+    }
+
+    fun onRegisterClicked(view: View) {
+        val intent = Intent(this, RegisterActivity::class.java)
+        resultLauncher.launch(intent)
+    }
+
+
+}

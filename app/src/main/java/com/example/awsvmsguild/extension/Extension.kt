@@ -12,3 +12,11 @@ fun AppCompatActivity.loadingDialog(@LayoutRes layout:Int, title: String, messag
     }.create()
     return loader
 }
+
+fun AppCompatActivity.snackBarShow() {
+
+}
+
+fun AppCompatActivity.toastShow() {
+
+}

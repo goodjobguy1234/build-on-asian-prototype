@@ -23,6 +23,9 @@ import com.amplifyframework.storage.StorageException
 import com.example.awsvmsguild.extension.loadingDialog
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.coroutines.*
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 
 class HomeActivity : AppCompatActivity() {
@@ -55,7 +58,7 @@ class HomeActivity : AppCompatActivity() {
 
         upload_btn.visibility = View.VISIBLE
         listOf<Button>(confirm_btn, cancel_btn).forEach { view ->
-            view.visibility = View.GONE
+            view.visibility = View.INVISIBLE
         }
 
         tv_signout.setOnClickListener {
@@ -114,7 +117,7 @@ class HomeActivity : AppCompatActivity() {
             mediaController.setAnchorView(this)
         }
 
-        upload_btn.visibility = View.GONE
+        upload_btn.visibility = View.INVISIBLE
         listOf<Button>(confirm_btn, cancel_btn).forEach { view ->
             view.visibility = View.VISIBLE
         }
@@ -129,7 +132,10 @@ class HomeActivity : AppCompatActivity() {
         if (id.type == AuthSessionResult.Type.SUCCESS) {
             Log.i("AuthQuickStart", "IdentityId: ${id.value}")
             val stream = contentResolver.openInputStream(uri)
-            val upload = Amplify.Storage.uploadInputStream("${id.value}:someExtra.mp4", stream!!)
+            val timestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss.SSSSSS").withZone(
+                ZoneOffset.UTC
+            ).format(Instant.now())
+            val upload = Amplify.Storage.uploadInputStream("${id.value!!.substring(10)}-${timestamp}.mp4", stream!!)
             try {
                 val result = upload.result()
                 Log.i("MyAmplifyApp", "Successfully uploaded: ${result.key}.")
@@ -145,7 +151,7 @@ class HomeActivity : AppCompatActivity() {
     fun onCancelClicked(view: View) {
         upload_btn.visibility = View.VISIBLE
         listOf<Button>(confirm_btn, cancel_btn).forEach { view ->
-            view.visibility = View.GONE
+            view.visibility = View.INVISIBLE
         }
     }
 
@@ -158,7 +164,7 @@ class HomeActivity : AppCompatActivity() {
                     loadingDialog.hide()
                     upload_btn.visibility = View.VISIBLE
                     listOf<Button>(confirm_btn, cancel_btn).forEach { view ->
-                        view.visibility = View.GONE
+                        view.visibility = View.INVISIBLE
                     }
                 }
             }

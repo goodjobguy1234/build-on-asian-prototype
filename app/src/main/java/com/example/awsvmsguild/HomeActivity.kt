@@ -53,7 +53,12 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-
+        with(videoView) {
+            setVideoPath("https://transcribe-audio-upload.s3.us-east-2.amazonaws.com/public/032dbf04-136e-43c8-ac66-5d71350934e8-2021-07-20-06-12-42.766000.mp4")
+            val mediaController = MediaController(this@HomeActivity)
+            setMediaController(mediaController)
+            mediaController.setAnchorView(this)
+        }
         loadingDialog = loadingDialog(R.layout.view_loading_dialog, "Uploading Video", "Loading")
 
         upload_btn.visibility = View.VISIBLE

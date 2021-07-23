@@ -20,6 +20,12 @@
           "deploymentBucketName": "amplify-newdev-newdev-222131-deployment",
           "s3Key": "amplify-builds/S3Triggerb18bad03-304e67464268784c6761-build.zip"
         }
+      },
+      "storage": {
+        "newdevc9ae3c1f": {
+          "bucketName": "transcribe-audio-upload",
+          "region": "us-east-2"
+        }
       }
     }
   }

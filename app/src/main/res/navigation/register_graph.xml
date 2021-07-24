@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/register_graph"
+    app:startDestination="@id/registerPageOne">
+
+    <fragment
+        android:id="@+id/registerPageOne"
+        android:name="com.example.awsvmsguild.RegisterPageOne"
+        android:label="fragment_register_page_one"
+        tools:layout="@layout/fragment_register_page_one" >
+        <action
+            android:id="@+id/action_registerPageOne_to_registerPageTwo"
+            app:destination="@id/registerPageTwo" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerPageTwo"
+        android:name="com.example.awsvmsguild.RegisterPageTwo"
+        android:label="fragment_register_page_two"
+        tools:layout="@layout/fragment_register_page_two" />
+</navigation>

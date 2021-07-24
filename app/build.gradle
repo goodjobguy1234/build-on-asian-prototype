@@ -59,5 +59,8 @@ dependencies {
 
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3'
 
+//    date picker
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+
 
 }

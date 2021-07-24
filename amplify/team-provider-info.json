@@ -19,6 +19,13 @@
         "S3Triggerb18bad03": {
           "deploymentBucketName": "amplify-newdev-newdev-222131-deployment",
           "s3Key": "amplify-builds/S3Triggerb18bad03-304e67464268784c6761-build.zip"
+        },
+        "newdevc4cf265bCustomMessage": {
+          "REDIRECTURL": "build-on-asian-vms-guild",
+          "EMAILSUBJECT": "Verifying Registration",
+          "EMAILMESSAGE": "Click this like to confirm account",
+          "deploymentBucketName": "amplify-newdev-newdev-222131-deployment",
+          "s3Key": "amplify-builds/newdevc4cf265bCustomMessage-426c534f365236324d6e-build.zip"
         }
       },
       "storage": {

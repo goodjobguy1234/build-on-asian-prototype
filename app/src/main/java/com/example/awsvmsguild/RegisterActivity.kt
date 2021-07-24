@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import com.amazonaws.mobile.auth.core.signin.AuthException
+import com.amplifyframework.auth.AuthUserAttribute
 import com.amplifyframework.auth.AuthUserAttributeKey
 import com.amplifyframework.auth.options.AuthSignUpOptions
 import com.amplifyframework.kotlin.core.Amplify
@@ -51,7 +51,12 @@ class RegisterActivity : AppCompatActivity() {
         val password = password_input.text.toString()
         val username = user_input.text.toString()
         val options = AuthSignUpOptions.builder()
-            .userAttribute(AuthUserAttributeKey.email(), email)
+            .userAttributes(listOf(
+                AuthUserAttribute(AuthUserAttributeKey.email(), email),
+                AuthUserAttribute(AuthUserAttributeKey.gender(), "female"),
+                AuthUserAttribute(AuthUserAttributeKey.name(), "Thitare Nimanong"),
+                AuthUserAttribute(AuthUserAttributeKey.birthdate(), "2021-07-23")
+            ))
             .build()
         try {
             val result = Amplify.Auth.signUp(username, password, options)

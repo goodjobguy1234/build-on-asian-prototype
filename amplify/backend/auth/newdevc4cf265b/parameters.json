@@ -1,6 +1,6 @@
 {
     "identityPoolName": "newdevc4cf265b_identitypool_c4cf265b",
-    "allowUnauthenticatedIdentities": true,
+    "allowUnauthenticatedIdentities": false,
     "resourceNameTruncated": "newdevc4cf265b",
     "userPoolName": "newdevc4cf265b_userpool_c4cf265b",
     "autoVerifiedAttributes": [
@@ -14,7 +14,7 @@
     "smsVerificationMessage": "Your verification code is {####}",
     "emailVerificationSubject": "Your verification code",
     "emailVerificationMessage": "Your verification code is {####}",
-    "defaultPasswordPolicy": false,
+    "defaultPasswordPolicy": true,
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
@@ -23,13 +23,24 @@
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [
+        "address",
+        "birthdate",
+        "gender",
+        "name",
+        "phone_number",
         "email"
     ],
     "userpoolClientReadAttributes": [
-        "email"
+        "birthdate",
+        "email",
+        "gender",
+        "name",
+        "phone_number",
+        "email_verified",
+        "phone_number_verified"
     ],
     "userpoolClientLambdaRole": "newdevc4cf265b_userpoolclient_lambda_role",
-    "userpoolClientSetAttributes": false,
+    "userpoolClientSetAttributes": true,
     "sharedId": "c4cf265b",
     "resourceName": "newdevc4cf265b",
     "authSelections": "identityPoolAndUserPool",
@@ -45,9 +56,32 @@
             "Arn"
         ]
     },
-    "useDefault": "default",
+    "useDefault": "manual",
     "userPoolGroupList": [],
     "serviceName": "Cognito",
     "usernameCaseSensitive": false,
-    "dependsOn": []
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "newdevc4cf265bCustomMessage",
+            "triggerProvider": "Cognito",
+            "attributes": [
+                "Arn",
+                "Name"
+            ]
+        }
+    ],
+    "thirdPartyAuth": false,
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "triggers": "{\n  \"CustomMessage\": [\n    \"verification-link\"\n  ]\n}",
+    "hostedUI": false,
+    "verificationBucketName": "newdevc4cf265bverificationbucket",
+    "parentStack": {
+        "Ref": "AWS::StackId"
+    },
+    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"CustomMessage\",\n    \"lambdaFunctionName\": \"newdevc4cf265bCustomMessage\"\n  }\n]",
+    "breakCircularDependency": true,
+    "permissions": [],
+    "authProviders": []
 }

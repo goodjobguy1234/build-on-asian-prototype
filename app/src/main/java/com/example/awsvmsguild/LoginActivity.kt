@@ -10,8 +10,11 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.amazonaws.mobile.auth.core.signin.AuthException
+import com.amazonaws.services.cognitoidentityprovider.model.NotAuthorizedException
+import com.amazonaws.services.cognitoidentityprovider.model.UserNotFoundException
 import com.amplifyframework.kotlin.core.Amplify
 import com.example.awsvmsguild.extension.loadingDialog
+import com.example.awsvmsguild.extension.snackBarShow
 import com.example.awsvmsguild.homeActivity.HomeActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.Dispatchers
@@ -40,9 +43,15 @@ class LoginActivity : AppCompatActivity() {
     fun onLoginCliked(view: View) {
         val username = user_input.text.toString()
         val password = password_input.text.toString()
-        loadingDialog.show()
-        GlobalScope.launch(Dispatchers.IO) {
-            auth(username, password)
+
+        if (password.trim() != "" && username.trim() != "") {
+            loadingDialog.show()
+            GlobalScope.launch(Dispatchers.IO) {
+                auth(username, password)
+            }
+        } else {
+            user_input.error = "require input"
+            password_input.error = "require input"
         }
     }
 
@@ -62,8 +71,21 @@ class LoginActivity : AppCompatActivity() {
                     loadingDialog.hide()
                 }
             }
-        } catch (error: AuthException) {
-            Log.e("AuthQuickstart", "Sign in failed", error)
+        }
+        catch (error: com.amplifyframework.auth.AuthException.UserNotFoundException) {
+            GlobalScope.launch(Dispatchers.Main) {
+                loadingDialog.hide()
+                cl_login.snackBarShow("User not Exists")
+            }
+        }
+
+        catch (error: com.amplifyframework.auth.AuthException) {
+            GlobalScope.launch(Dispatchers.Main) {
+                loadingDialog.hide()
+                cl_login.snackBarShow("Login Failed, Incorrect Username or Password")
+                user_input.error = "Username maybe wrong"
+                password_input.error = "Password maybe wrong"
+            }
         }
     }
 

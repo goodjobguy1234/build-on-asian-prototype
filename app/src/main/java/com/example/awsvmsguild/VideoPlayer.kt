@@ -8,16 +8,16 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_video_player.*
 
 class VideoPlayer : AppCompatActivity() {
-    lateinit var data: VideoContent
+    var data: VideoContent? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
 
-        val data = intent.getParcelableExtra<VideoContent>("vdocontent")
+        data = intent?.getParcelableExtra<VideoContent>("vdocontent")
 
         with(video_view) {
             setErrorTracker {
-                Snackbar.make(video_view, "Uh oh, error playing!", Snackbar.LENGTH_INDEFINITE).show();
+                Snackbar.make(video_view, "Uh oh, error playing!", Snackbar.LENGTH_INDEFINITE).show()
             }
 
             start(data?.url)
@@ -30,6 +30,10 @@ class VideoPlayer : AppCompatActivity() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        video_view.release()
+    }
     override fun onStop() {
         super.onStop()
         video_view.release()

@@ -10,6 +10,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amazonaws.mobile.auth.core.signin.AuthException
+import com.amplifyframework.auth.cognito.AWSCognitoAuthSession
+import com.amplifyframework.auth.result.AuthSessionResult
 import com.amplifyframework.kotlin.core.Amplify
 import com.example.awsvmsguild.R
 import com.example.awsvmsguild.UploadActivity
@@ -62,12 +64,10 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun observerData() {
-        model.learnerVideo.observe(this) {
+        model.creatorvideo.observe(this) {
             data.clear()
             data.addAll(it)
             recyclerView.adapter?.notifyDataSetChanged()
         }
     }
-
-
 }

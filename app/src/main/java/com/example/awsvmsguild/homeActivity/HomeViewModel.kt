@@ -12,10 +12,14 @@ import kotlinx.coroutines.launch
 class HomeViewModel: ViewModel() {
     var repo = VideoRepository()
     var learnerVideo = MutableLiveData<ArrayList<VideoContent>>()
+    var creatorvideo = MutableLiveData<ArrayList<VideoContent>>()
+    var loadingState = MutableLiveData<Boolean>()
 
     fun getVideo(userId: String) {
+        loadingState.value = true
         repo.fetchVideo(userId).observeForever {
-                learnerVideo.value = it.body
+                loadingState.value = false
+                creatorvideo.value = it.body
             }
     }
 

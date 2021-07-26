@@ -109,14 +109,14 @@ class UploadActivity : AppCompatActivity() {
             loadingDialog.show()
         }
         val session = Amplify.Auth.fetchAuthSession() as AWSCognitoAuthSession
-        val id = session.identityId
+        val id = session.userSub
         if (id.type == AuthSessionResult.Type.SUCCESS) {
             Log.i("AuthQuickStart", "IdentityId: ${id.value}")
             val stream = contentResolver.openInputStream(uri)
             val timestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss.SSSSSS").withZone(
                 ZoneOffset.UTC
             ).format(Instant.now())
-            val upload = Amplify.Storage.uploadInputStream("${id.value!!.substring(10)}-${timestamp}.mp4", stream!!)
+            val upload = Amplify.Storage.uploadInputStream("${id.value!!}-${timestamp}.mp4", stream!!)
             try {
                 val result = upload.result()
                 Log.i("MyAmplifyApp", "Successfully uploaded: ${result.key}.")

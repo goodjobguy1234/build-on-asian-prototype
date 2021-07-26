@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import com.amazonaws.mobile.auth.core.signin.AuthException
 import com.amplifyframework.kotlin.core.Amplify
 import com.example.awsvmsguild.extension.loadingDialog
+import com.example.awsvmsguild.homeActivity.HomeActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

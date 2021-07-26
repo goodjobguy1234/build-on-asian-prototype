@@ -5,6 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="20dp"
     app:cardPreventCornerOverlap="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,12 +25,16 @@
 
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:text="Video"
             android:textStyle="bold"
+            android:gravity="center"
+            android:maxLines="1"
+            android:maxLength="150"
+            android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/iv_vdo"
             app:layout_constraintStart_toStartOf="@+id/iv_vdo"

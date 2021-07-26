@@ -15,6 +15,7 @@ class VideoPlayer : AppCompatActivity() {
 
         data = intent?.getParcelableExtra<VideoContent>("vdocontent")
 
+        tv_describe.text = data?.text_result
         with(video_view) {
             setErrorTracker {
                 Snackbar.make(video_view, "Uh oh, error playing!", Snackbar.LENGTH_INDEFINITE).show()
@@ -25,6 +26,7 @@ class VideoPlayer : AppCompatActivity() {
                 if (isPlaying) pause()
                 else play()
             }
+            setShouldLoop(true)
 
         }
 

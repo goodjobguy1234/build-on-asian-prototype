@@ -41,9 +41,9 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         loadingDialog = loadingDialog(R.layout.view_loading_dialog, "Logging in", "Loading")
-//        GlobalScope.launch(Dispatchers.IO) {
-//            checkIsSigningIn()
-//        }
+        GlobalScope.launch(Dispatchers.IO) {
+            checkIsSigningIn()
+        }
 
     }
 
@@ -66,9 +66,6 @@ class LoginActivity : AppCompatActivity() {
         try {
             val result = Amplify.Auth.signIn(username, password)
             if (result.isSignInComplete) {
-                GlobalScope.launch(Dispatchers.IO) {
-                    test()
-                }
                 GlobalScope.launch(Dispatchers.Main) {
                     Toast.makeText(this@LoginActivity, "Login success", Toast.LENGTH_SHORT).show()
                     loadingDialog.hide()
@@ -120,19 +117,4 @@ class LoginActivity : AppCompatActivity() {
             Log.e("AmplifyQuickstart", "Failed to fetch auth session", error)
         }
     }
-
-    private suspend fun test() {
-        try {
-            val session = Amplify.Auth.fetchAuthSession() as AWSCognitoAuthSession
-            val id = session.userSub
-            if (id.type == AuthSessionResult.Type.SUCCESS) {
-                Log.i("sign in-id", "IdentityId: ${id.value}")
-            } else if (id.type == AuthSessionResult.Type.FAILURE) {
-                Log.i("AuthQuickStart", "IdentityId not present: ${id.error}")
-            }
-        } catch (error: AuthException) {
-            Log.e("AuthQuickStart", "Failed to fetch session", error)
-        }
-    }
-
 }

@@ -8,6 +8,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amazonaws.mobile.auth.core.signin.AuthException
 import com.amplifyframework.auth.cognito.AWSCognitoAuthSession
@@ -23,13 +25,17 @@ import kotlinx.coroutines.*
 
 
 class HomeActivity : AppCompatActivity() {
-    val model by viewModels<HomeViewModel>()
-    val data = ArrayList<VideoContent>()
+    private val model by viewModels<HomeViewModel>()
+    private val data = ArrayList<VideoContent>()
+    private var userId: MutableLiveData<String> = MutableLiveData()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        model.getVideo("841abbca-76d6-4ca2-b97c-34110886086e")
+        GlobalScope.launch(Dispatchers.IO) {
+            getUserSub()
+        }
+
         with(recyclerView) {
             adapter = ThumbnailAdapter(data) {
                 val intent = Intent(this@HomeActivity, VideoPlayer::class.java)
@@ -39,6 +45,7 @@ class HomeActivity : AppCompatActivity() {
             layoutManager = GridLayoutManager(this@HomeActivity, 2)
         }
         observerData()
+        observerView()
         tv_signout.setOnClickListener {
             GlobalScope.launch(Dispatchers.IO) {
                 onClickSigningOut()
@@ -48,6 +55,11 @@ class HomeActivity : AppCompatActivity() {
         fab.setOnClickListener {
             val intent = Intent(this, UploadActivity::class.java)
             startActivity(intent)
+        }
+        sl_recycler.setOnRefreshListener {
+            GlobalScope.launch(Dispatchers.IO) {
+                getUserSub()
+            }
         }
     }
 
@@ -68,6 +80,32 @@ class HomeActivity : AppCompatActivity() {
             data.clear()
             data.addAll(it)
             recyclerView.adapter?.notifyDataSetChanged()
+        }
+
+        userId.observe(this) {
+            Log.d("userid", it)
+            model.getVideo(it)
+        }
+    }
+    private fun observerView() {
+        model.loadingState.observe(this) {
+            sl_recycler.isRefreshing = it
+        }
+    }
+
+    private suspend fun getUserSub() {
+        try {
+            val session = Amplify.Auth.fetchAuthSession() as AWSCognitoAuthSession
+            val id = session.userSub
+            if (id.type == AuthSessionResult.Type.SUCCESS) {
+                Log.i("sign in-id", "IdentityId: ${id.value}")
+            } else if (id.type == AuthSessionResult.Type.FAILURE) {
+                Log.i("AuthQuickStart", "IdentityId not present: ${id.error}")
+            }
+            userId.postValue(id.value.toString())
+
+        } catch (error: AuthException) {
+            Log.e("AuthQuickStart", "Failed to fetch session", error)
         }
     }
 }

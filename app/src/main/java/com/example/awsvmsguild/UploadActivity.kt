@@ -125,8 +125,8 @@ class UploadActivity : AppCompatActivity() {
                 ZoneOffset.UTC
             ).format(Instant.now())
 
-            var key =  if (mode || vdoId == -1) "${id.value!!}-${timestamp}.mp4"
-                        else "${vdoId}-${id.value!!}-${timestamp}.mp4"
+            var key =  if (mode || vdoId == -1) "creator/${id.value!!}-${timestamp}.mp4"
+                        else "learner/${vdoId}-${id.value!!}-${timestamp}.mp4"
 
             val upload = Amplify.Storage.uploadInputStream(key, stream!!)
 

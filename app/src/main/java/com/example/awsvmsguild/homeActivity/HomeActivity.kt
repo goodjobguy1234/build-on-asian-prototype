@@ -28,6 +28,7 @@ class HomeActivity : AppCompatActivity() {
     private val model by viewModels<HomeViewModel>()
     private val data = ArrayList<VideoContent>()
     private var userId: MutableLiveData<String> = MutableLiveData()
+    private var creatorMode = false //false -> learner mode
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -40,6 +41,8 @@ class HomeActivity : AppCompatActivity() {
             adapter = ThumbnailAdapter(data) {
                 val intent = Intent(this@HomeActivity, VideoPlayer::class.java)
                 intent.putExtra("vdocontent", it)
+                creatorMode = radioGroup.checkedRadioButtonId == R.id.radio_1
+                intent.putExtra("creatorMode", creatorMode)
                 startActivity(intent)
             }
             layoutManager = GridLayoutManager(this@HomeActivity, 2)
@@ -60,6 +63,21 @@ class HomeActivity : AppCompatActivity() {
             GlobalScope.launch(Dispatchers.IO) {
                 getUserSub()
             }
+        }
+        radioGroup.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.radio_1 -> {
+                    fab.show()
+                }
+
+                R.id.radio_2 -> {
+                    fab.hide()
+                }
+            }
+            GlobalScope.launch(Dispatchers.IO) {
+                getUserSub()
+            }
+
         }
     }
 
@@ -82,9 +100,21 @@ class HomeActivity : AppCompatActivity() {
             recyclerView.adapter?.notifyDataSetChanged()
         }
 
+        model.learnerVideo.observe(this) {
+            data.clear()
+            data.addAll(it)
+            recyclerView.adapter?.notifyDataSetChanged()
+        }
+
         userId.observe(this) {
             Log.d("userid", it)
-            model.getVideo(it)
+            if (radioGroup.checkedRadioButtonId == R.id.radio_1) {
+                model.getVideo(it)
+                Log.d("mode, Creator", "Creator")
+            } else {
+                model.getLearnerVideo()
+                Log.d("mode, Learner", "Leaner")
+            }
         }
     }
     private fun observerView() {

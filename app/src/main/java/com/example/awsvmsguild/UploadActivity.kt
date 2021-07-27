@@ -29,6 +29,8 @@ import java.time.format.DateTimeFormatter
 class UploadActivity : AppCompatActivity() {
     lateinit var loadingDialog: AlertDialog
     private var vdoUri: Uri? = null
+    private var mode: Boolean = false
+    private var vdoId: Int = -1
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let {
@@ -51,6 +53,11 @@ class UploadActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload)
+
+        mode = intent.getBooleanExtra("creatorMode", false)
+        vdoId = intent.getIntExtra("vdoid", -1)
+        Log.d("uploadMode", mode.toString())
+        Log.d("videoId", vdoId.toString())
 
         loadingDialog = loadingDialog(R.layout.view_loading_dialog, "Uploading Video", "Loading")
 
@@ -111,12 +118,18 @@ class UploadActivity : AppCompatActivity() {
         val session = Amplify.Auth.fetchAuthSession() as AWSCognitoAuthSession
         val id = session.userSub
         if (id.type == AuthSessionResult.Type.SUCCESS) {
+
             Log.i("AuthQuickStart", "IdentityId: ${id.value}")
             val stream = contentResolver.openInputStream(uri)
             val timestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss.SSSSSS").withZone(
                 ZoneOffset.UTC
             ).format(Instant.now())
-            val upload = Amplify.Storage.uploadInputStream("${id.value!!}-${timestamp}.mp4", stream!!)
+
+            var key =  if (mode || vdoId == -1) "${id.value!!}-${timestamp}.mp4"
+                        else "${vdoId}-${id.value!!}-${timestamp}.mp4"
+
+            val upload = Amplify.Storage.uploadInputStream(key, stream!!)
+
             try {
                 val result = upload.result()
                 Log.i("MyAmplifyApp", "Successfully uploaded: ${result.key}.")
@@ -150,5 +163,24 @@ class UploadActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        loadingDialog.dismiss()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putBoolean("savedMode", mode)
+        outState.putInt("saveVdoId", vdoId)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        vdoId = savedInstanceState.getInt("saveVdoId")
+        mode = savedInstanceState.getBoolean("savedMode")
+        Log.d("resotoring", "${vdoId} mode: ${mode}")
     }
 }

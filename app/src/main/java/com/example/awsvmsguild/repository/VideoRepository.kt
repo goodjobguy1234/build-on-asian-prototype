@@ -33,4 +33,24 @@ class VideoRepository {
             }
         }
     }
+
+    fun fetchLearnerVideo(): LiveData<ResponseVideo> {
+        return object : LiveData<ResponseVideo>() {
+            init {
+                GlobalScope.launch(Dispatchers.IO) {
+                    "https://56lh56t27g.execute-api.us-east-2.amazonaws.com/videoToLearner/video".httpGet()
+                        .responseObject<ResponseVideo> { request, response, result ->
+                            when (response.statusCode) {
+                                in 200..205 -> {
+                                    GlobalScope.launch(Dispatchers.Main) {
+                                        value = result.component1()
+                                    }
+                                }
+                                else -> print("Error")
+                            }
+                        }
+                }
+            }
+        }
+    }
 }

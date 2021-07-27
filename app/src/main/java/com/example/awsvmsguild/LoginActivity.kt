@@ -117,4 +117,9 @@ class LoginActivity : AppCompatActivity() {
             Log.e("AmplifyQuickstart", "Failed to fetch auth session", error)
         }
     }
+
+    override fun onStop() {
+        super.onStop()
+        loadingDialog.dismiss()
+    }
 }

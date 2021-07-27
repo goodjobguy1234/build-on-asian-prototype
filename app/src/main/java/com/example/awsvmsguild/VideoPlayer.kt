@@ -8,12 +8,14 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_video_player.*
 
 class VideoPlayer : AppCompatActivity() {
-    var data: VideoContent? = null
+    private var data: VideoContent? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_player)
 
         data = intent?.getParcelableExtra<VideoContent>("vdocontent")
+        var mode = intent?.getBooleanExtra("creatorMode", false)
 
         tv_describe.text = data?.text_result
         with(video_view) {
@@ -28,6 +30,18 @@ class VideoPlayer : AppCompatActivity() {
             }
             setShouldLoop(true)
 
+        }
+
+        mode?.let {
+            if(it) fab.hide()
+            else fab.show()
+        }
+
+        fab.setOnClickListener {
+            val intent = Intent(this, UploadActivity::class.java)
+            intent.putExtra("creatorMode", mode)
+            intent.putExtra("vdoid", data!!.id)
+            startActivity(intent)
         }
 
     }

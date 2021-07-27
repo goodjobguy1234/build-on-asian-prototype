@@ -21,6 +21,15 @@ class HomeViewModel: ViewModel() {
                 loadingState.value = false
                 creatorvideo.value = it.body
             }
+
+    }
+
+    fun getLearnerVideo() {
+        loadingState.value = true
+        repo.fetchLearnerVideo().observeForever {
+            loadingState.value = false
+            learnerVideo.value = it.body
+        }
     }
 
 }

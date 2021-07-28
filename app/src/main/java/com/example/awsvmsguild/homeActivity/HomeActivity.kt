@@ -5,10 +5,8 @@ package com.example.awsvmsguild.homeActivity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.amazonaws.mobile.auth.core.signin.AuthException
@@ -16,10 +14,10 @@ import com.amplifyframework.auth.cognito.AWSCognitoAuthSession
 import com.amplifyframework.auth.result.AuthSessionResult
 import com.amplifyframework.kotlin.core.Amplify
 import com.example.awsvmsguild.R
+import com.example.awsvmsguild.resultActivity.ResultActivity
 import com.example.awsvmsguild.UploadActivity
 import com.example.awsvmsguild.VideoPlayer
 import com.example.awsvmsguild.data.VideoContent
-import com.github.kittinunf.fuel.httpGet
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.coroutines.*
 
@@ -78,6 +76,13 @@ class HomeActivity : AppCompatActivity() {
                 getUserSub()
             }
 
+        }
+
+        btn_result.setOnClickListener {
+            Intent(this, ResultActivity::class.java).apply {
+                putExtra("userId", userId.value)
+                startActivity(this)
+            }
         }
     }
 

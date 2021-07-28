@@ -29,28 +29,7 @@ class RegisterActivity : AppCompatActivity() {
         loadingDialog = loadingDialog(R.layout.view_loading_dialog, "Logging in", "Loading")
     }
 
-//    fun onNextClicked(view: View) {
-//        val password = password_input.text.toString()
-//        val re_password = repassword_input.text.toString()
-//
-//        if (password == re_password) {
-//            loadingDialog.show()
-//            GlobalScope.launch(Dispatchers.IO) {
-//                signingUp()
-//            }
-//        } else {
-//            password_input.error = "Different password"
-//            repassword_input.error = "Different password"
-//        }
-//    }
-//    fun onCancleClicked(view: View) {
-//        onBackPressed()
-//    }
-//
     suspend fun signingUp(data: SignUPData) {
-//        val email = email_input.text.toString()
-//        val password = password_input.text.toString()
-//        val username = user_input.text.toString()
         val options = AuthSignUpOptions.builder()
             .userAttributes(listOf(
                 AuthUserAttribute(AuthUserAttributeKey.email(), data.email),
@@ -74,10 +53,6 @@ class RegisterActivity : AppCompatActivity() {
             }
             Log.i("RegisterResultS", "Result: $result")
         } catch (error: com.amplifyframework.auth.AuthException.InvalidPasswordException) {
-//            GlobalScope.launch(Dispatchers.Main) {
-//                password_input.error = "Password did not conform with policy"
-//                repassword_input.error = "Password did not conform with policy"
-//            }
             Log.e("RegisterResultF", "Sign up failed", error)
         }
     }

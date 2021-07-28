@@ -17,8 +17,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AwsVmsGuild">
+        <activity android:name=".resultActivity.ResultActivity"></activity>
+        <activity android:name=".VideoPlayer" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".HomeActivity" />
+        <activity android:name=".homeActivity.HomeActivity"></activity>
         <activity android:name=".UploadActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

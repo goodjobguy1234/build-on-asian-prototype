@@ -1,0 +1,26 @@
+{
+  "trigger": true,
+  "modules": [
+    "verification-link"
+  ],
+  "parentResource": "newdevc4cf265b",
+  "functionName": "newdevc4cf265bCustomMessage",
+  "resourceName": "newdevc4cf265bCustomMessage",
+  "parentStack": "auth",
+  "triggerEnvs": [
+    {
+      "key": "RESOURCENAME",
+      "value": "resourceName"
+    }
+  ],
+  "triggerDir": "C:\\Users\\USER\\AppData\\Roaming\\npm\\node_modules\\@aws-amplify\\cli\\node_modules\\amplify-category-auth\\provider-utils\\awscloudformation\\triggers\\CustomMessage",
+  "triggerTemplate": "CustomMessage.json.ejs",
+  "triggerEventPath": "CustomMessage.event.json",
+  "roleName": "newdevc4cf265bCustomMessage",
+  "skipEdit": true,
+  "REDIRECTURL": "build-on-asian-vms-guild",
+  "EMAILSUBJECT": "Verifying Registration",
+  "EMAILMESSAGE": "Click this like to confirm account",
+  "RESOURCENAME": "resourceName",
+  "enableCors": false
+}

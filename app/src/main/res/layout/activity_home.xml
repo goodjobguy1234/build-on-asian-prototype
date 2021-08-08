@@ -6,11 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".homeActivity.HomeActivity">
 
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/btn_result"
+        app:layout_constraintStart_toEndOf="@+id/tv_signout"
+        app:layout_constraintTop_toBottomOf="@+id/tv_signout">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/usercoin" />
+
+        <TextView
+            android:id="@+id/tv_coin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:text="--"
+            android:textSize="38sp"
+            android:textColor="#FFC107"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+
+
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="17dp"
         android:background="@drawable/view_radio_backgroud"
         android:checkedButton="@id/radio_1"
         android:gravity="center_horizontal"
@@ -18,7 +48,7 @@
         android:padding="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_signout">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <RadioButton
             android:id="@+id/radio_1"

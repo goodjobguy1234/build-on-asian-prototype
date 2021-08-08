@@ -99,6 +99,9 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun observerData() {
+        model.userCoin.observe(this) {
+            tv_coin.text = it.coin.toString()
+        }
         model.creatorvideo.observe(this) {
             data.clear()
             data.addAll(it)
@@ -112,14 +115,12 @@ class HomeActivity : AppCompatActivity() {
         }
 
         userId.observe(this) {
-            Log.d("userid", it)
             if (radioGroup.checkedRadioButtonId == R.id.radio_1) {
                 model.getVideo(it)
-                Log.d("mode, Creator", "Creator")
             } else {
                 model.getLearnerVideo()
-                Log.d("mode, Learner", "Leaner")
             }
+            model.getTotalCoin(it)
         }
     }
     private fun observerView() {
